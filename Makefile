@@ -1,106 +1,130 @@
-all: setup up
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: maalexan <maalexan@student.42sp.org.br>    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/11 07:54:59 by maalexan          #+#    #+#              #
+#    Updated: 2025/04/11 08:05:12 by maalexan         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+USER				:= maalexan
+DATA_DIR			:= /home/$(USER)/data
+DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
+
+all: permissions setup up
 
 setup:
-	@sudo echo "Setting hosts..."
-	@sudo chmod a+w /etc/hosts
-	@sudo cat /etc/hosts | grep maalexan.42.fr || echo "127.0.0.1 maalexan.42.fr" >> /etc/hosts
-	@sudo mkdir -p /home/maalexan/data/wp-pages
-	@sudo mkdir -p /home/maalexan/data/wp-database
-	@sudo mkdir -p /home/maalexan/data/adminer-volume
-	@sudo mkdir -p /home/maalexan/data/minecraft-volume
+	@echo "Setting hosts..."
+	@chmod a+w /etc/hosts
+	@cat /etc/hosts  grep $(USER).42.fr || echo "127.0.0.1 $(USER).42.fr" >> /etc/hosts
+	@mkdir -p $(DATA_DIR)/wp-pages
+	@mkdir -p $(DATA_DIR)/wp-database
+	@mkdir -p $(DATA_DIR)/adminer-volume
+	@mkdir -p $(DATA_DIR)/minecraft-volume
 
 up:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d
 
 redis:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d redis
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d redis
 
 build-redis:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate redis
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate redis
 
 down-redis:
-	sudo docker-compose -f ./srcs/docker-compose.yml down redis
+	docker-compose -f $(DOCKER_COMPOSE_YML) down redis
 
 adminer:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d adminer
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d adminer
 
 build-adminer:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate adminer
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate adminer
 
 down-adminer:
-	sudo docker-compose -f ./srcs/docker-compose.yml down adminer
+	docker-compose -f $(DOCKER_COMPOSE_YML) down adminer
 
 minecraft:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d minecraft
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d minecraft
 
 build-minecraft:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate minecraft
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate minecraft
 
 down-minecraft:
-	sudo docker-compose -f ./srcs/docker-compose.yml down minecraft
+	docker-compose -f $(DOCKER_COMPOSE_YML) down minecraft
 
 site:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d site
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d site
 
 build-site:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate site
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate site
 
 down-site:
-	sudo docker-compose -f ./srcs/docker-compose.yml down site
+	docker-compose -f $(DOCKER_COMPOSE_YML) down site
 
 ftp:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d ftp
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d ftp
 
 build-ftp:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate ftp
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate ftp
 
 down-ftp:
-	sudo docker-compose -f ./srcs/docker-compose.yml down ftp
+	docker-compose -f $(DOCKER_COMPOSE_YML) down ftp
 
 nginx:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d nginx 
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d nginx 
 
 build-nginx:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate nginx
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate nginx
 
 down-nginx:
-	sudo docker-compose -f ./srcs/docker-compose.yml down nginx
+	docker-compose -f $(DOCKER_COMPOSE_YML) down nginx
 
 mariadb:
-	sudo mkdir -p /home/maalexan/data/wp-database
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d mariadb 
+	mkir -p $(DATA_DIR)/wp-database
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d mariadb 
 
 build-mariadb:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate mariadb
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate mariadb
 
 down-mariadb:
-	sudo docker-compose -f ./srcs/docker-compose.yml down mariadb
+	docker-compose -f $(DOCKER_COMPOSE_YML) down mariadb
 
 wordpress:
-	sudo mkdir -p /home/maalexan/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d wordpress 
+	mkir -p $(DATA_DIR)/wp-pages
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d wordpress 
 
 build-wordpress:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate wordpress
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate wordpress
 
 down-wordpress:
-	sudo docker-compose -f ./srcs/docker-compose.yml down wordpress
+	docker-compose -f $(DOCKER_COMPOSE_YML) down wordpress
 
 down:
-	sudo docker-compose -f ./srcs/docker-compose.yml down
+	docker-compose -f $(DOCKER_COMPOSE_YML) down
+
+permission:
+	@echo "Checking Docker permissions..."
+	@docker info > /dev/null 2>&1 || (\
+		echo "Docker requires elevated permissions"; \
+		echo "Try: sudo usermod -aG docker $$(whoami) && newgrp docker"; \
+		false)
+	@echo "✅"
 
 clean:
-	@sudo rm -rf /home/maalexan
-	@sudo docker-compose -f ./srcs/docker-compose.yml down -v --rmi all --remove-orphans
+	@r -rf $(DATA_DIR)/wp-pages $(DATA_DIR)/wp-database $(DATA_DIR)/adminer-volume $(DATA_DIR)/minecraft-volume
+	@docker-compose -f $(DOCKER_COMPOSE_YML) down -v --rmi all --remove-orphans
 
 fclean: clean
-	@sudo docker system prune --volumes --all --force
+	@docker system prune --volumes --all --force
 
 re: fclean all
 
