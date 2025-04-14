@@ -10,16 +10,16 @@
 #                                                                              #
 # **************************************************************************** #
 
-USER				:= maalexan
-DATA_DIR			:= /home/$(USER)/data
+LOGIN								:= maalexan
+DATA_DIR						:= /home/$(LOGIN)/data
 DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
-SERVICES			:= nginx
+SERVICES						:= nginx
 
 all: permission setup up
 
 setup:
 	@echo "Setting up hosts and data directories..."
-#remove comment on final version @grep -q "$(USER).42.fr" /etc/hosts || echo "127.0.0.1 $(USER).42.fr" | sudo tee -a /etc/hosts > /dev/null
+#remove comment on final version @grep -q "$(LOGIN).42.fr" /etc/hosts || echo "127.0.0.1 $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
 
 up:
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d
@@ -43,7 +43,7 @@ $(1):
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
 
 build-$(1):
-	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
+	USER=$(LOGIN) docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
 
 stop-$(1):
 	docker-compose -f $(DOCKER_COMPOSE_YML) stop $(1)

@@ -1,0 +1,24 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: ./requirements/nginx
+      args:
+        DOMAIN_NAME: "${USER}.42.fr"
+    container_name: nginx
+    volumes:
+      - wp-pages:/var/www/wordpress
+      - adminer-volume:/var/www/adminer
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - wordpress
+
+
+networks:
+  inception:
+    driver: bridge
+    name: inception
