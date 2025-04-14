@@ -13,17 +13,13 @@
 USER				:= maalexan
 DATA_DIR			:= /home/$(USER)/data
 DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
-SERVICES			:= redis adminer minecraft site ftp nginx mariadb wordpress
+SERVICES			:= nginx
 
 all: permission setup up
 
 setup:
-	@echo "🔧 Setting up hosts and data directories..."
-	@grep -q "$(USER).42.fr" /etc/hosts || echo "127.0.0.1 $(USER).42.fr" | sudo tee -a /etc/hosts > /dev/null
-	@mkdir -p $(DATA_DIR)/wp-pages
-	@mkdir -p $(DATA_DIR)/wp-database
-	@mkdir -p $(DATA_DIR)/adminer-volume
-	@mkdir -p $(DATA_DIR)/minecraft-volume
+	@echo "Setting up hosts and data directories..."
+#remove comment on final version @grep -q "$(USER).42.fr" /etc/hosts || echo "127.0.0.1 $(USER).42.fr" | sudo tee -a /etc/hosts > /dev/null
 
 up:
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d
