@@ -43,7 +43,7 @@ $(1):
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
 
 build-$(1):
-	USER=$(LOGIN) docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
+	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
 
 stop-$(1):
 	docker-compose -f $(DOCKER_COMPOSE_YML) stop $(1)
@@ -68,10 +68,11 @@ fclean: clean
 	@echo "Removing all containers and images for services: $(SERVICES)"
 	@docker-compose -f $(DOCKER_COMPOSE_YML) rm -sfv $(SERVICES)
 
+re: fclean all
+
 nuke: clean
 	@docker system prune --volumes --all --force
 
-re: fclean all
 
 .PHONY: all setup up down clean fclean nuke re permission \
 	$(SERVICES) \
