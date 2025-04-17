@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   nginx:
     build:
@@ -14,11 +15,35 @@ services:
     networks:
       - inception
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-k", "-f", "https://${USER}.42.fr"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
       - wordpress
 
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build:
+      context: ./requirements/wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
+    env_file: .env
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    init: true
 
 networks:
   inception:
     driver: bridge
     name: inception
+
+volumes:
+  wp-pages:
+  adminer-volume:
+  wordpress:
