@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "DB: $WP_DATABASE_NAME, User: $WP_DATABASE_USER, Psswd: $WP_DATABASE_PASSWORD, DBroot: $WP_DATABASE_ROOT, DBPsswd $WP_DATABASE_ROOT_PASSWORD"
-
 # Ensure the data directory is initialized
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB data dir..."
@@ -12,7 +10,12 @@ fi
 # Start mysqld as mysql user
 echo "Starting MariaDB..."
 mysqld_safe --user=mysql &
-sleep 5
+
+until mariadb-admin ping --protocol=socket --socket=/run/mysqld/mysqld.sock --silent; do
+  echo "Waiting for MariaDB to be ready..."
+  sleep 1
+done
+
 
 echo "Creating database and users..."
 
@@ -28,7 +31,8 @@ FLUSH PRIVILEGES;
 EOF
 
 # Shut down cleanly
-mysqladmin --protocol=socket -u root -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
+mysqladmin -u root --protocol=socket --socket=/run/mysqld/mysqld.sock -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
+
 
 # Launch MariaDB normally
 exec mariadbd --user=mysql
