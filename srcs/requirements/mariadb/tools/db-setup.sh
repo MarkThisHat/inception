@@ -27,13 +27,13 @@ CREATE DATABASE IF NOT EXISTS \`${WP_DATABASE_NAME}\`;
 CREATE USER IF NOT EXISTS '${WP_DATABASE_USER}'@'%' IDENTIFIED BY '${WP_DATABASE_PASSWORD}';
 GRANT ALL PRIVILEGES ON \`${WP_DATABASE_NAME}\`.* TO '${WP_DATABASE_USER}'@'%';
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${WP_DATABASE_ROOT_PASSWORD}';
-CREATE USER IF NOT EXISTS 'healthchecker'@'localhost' IDENTIFIED BY 'checkpass';
-GRANT USAGE ON *.* TO 'healthchecker'@'localhost';
+CREATE USER IF NOT EXISTS '${HEALTH_USER}'@'localhost' IDENTIFIED BY '${HEALTH_PASS}';
+GRANT USAGE ON *.* TO '${HEALTH_USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
 # Shut down cleanly
-mysqladmin -uroot --protocol=socket --socket=/run/mysqld/mysqld.sock -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
+mysqladmin -u root --protocol=socket --socket=/run/mysqld/mysqld.sock -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
 
 
 # Launch MariaDB normally
