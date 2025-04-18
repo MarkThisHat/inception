@@ -31,7 +31,7 @@ FLUSH PRIVILEGES;
 EOF
 
 # Shut down cleanly
-mysqladmin -u root --protocol=socket --socket=/run/mysqld/mysqld.sock -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
+mysqladmin -uroot --protocol=socket --socket=/run/mysqld/mysqld.sock -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
 
 
 # Launch MariaDB normally
