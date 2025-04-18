@@ -82,7 +82,7 @@ services:
     depends_on:
       - mariadb
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
       interval: 30s
       retries: 3
       start_period: 30s
