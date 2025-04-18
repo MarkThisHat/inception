@@ -2,6 +2,8 @@ FROM alpine:3.20
 
 RUN apk update && apk add --no-cache \
     php php-fpm php-mysqli \
+    php-phar php-json php-curl php-opcache \
+    php-common \
     mariadb-client curl wget
 
 RUN mkdir -p /etc/php/php-fpm.d && \
