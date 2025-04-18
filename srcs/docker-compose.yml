@@ -29,7 +29,7 @@ services:
     build:
       context: ./requirements/wordpress
     volumes:
-      - wordpress:/var/www/wordpress
+      - wp-pages:/var/www/wordpress
     env_file: .env
     restart: unless-stopped
     depends_on:
@@ -56,7 +56,7 @@ services:
     container_name: mariadb
     restart: unless-stopped
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - wp-database:/var/lib/mysql
     env_file: .env
     networks:
       - inception
@@ -116,18 +116,18 @@ networks:
     name: inception
 
 volumes:
-  wordpress:
+  wp-pages:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
       device: '/home/{$USER}/data/wp-pages'
-  mariadb-data:
+  wp-database:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/${USER}/data/mariadb-data'
+      device: '/home/${USER}/data/wp-database'
   adminer-volume:
     driver: local
     driver_opts:
