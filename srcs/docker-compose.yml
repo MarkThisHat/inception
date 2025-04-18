@@ -81,12 +81,24 @@ services:
       always
     depends_on:
       - mariadb
-    healthcheck:
+    healthcheck: #this shit might have to go
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
       interval: 30s
       retries: 3
       start_period: 30s
       timeout: 10s
+
+  redis:
+    image: redis
+    build:
+      context: ./bonus/redis
+    container_name: redis
+    networks:
+      - inception
+    restart:
+      always
+    depends_on:
+      - wordpress
 
 networks:
   inception:
