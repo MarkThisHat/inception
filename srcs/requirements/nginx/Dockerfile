@@ -13,10 +13,10 @@ RUN adduser -u ${UID} -G www-data -D -s /sbin/nologin nginxuser && \
       -x509 -days 365 \
       -out /etc/nginx/ssl/certificate.pem \
       -subj "/C=BR/ST=SP/L=SãoPaulo/O=42sp/CN=${DOMAIN_NAME}" && \
-    chown -R nginxuser:www-data /var/www /etc/nginx /var/log/nginx /var/lib/nginx /etc/nginx/ssl && \
+#    chown -R nginxuser:www-data /var/www /etc/nginx /var/log/nginx /var/lib/nginx /etc/nginx/ssl && \
     chmod 755 /var/lib/nginx /var/lib/nginx/logs && \
     touch /var/lib/nginx/logs/error.log && \
-    chown nginxuser:www-data /var/lib/nginx/logs/error.log && \
+    #chown nginxuser:www-data /var/lib/nginx/logs/error.log && \
     chmod 755 /var/lib/nginx/logs/error.log
 
 COPY ./conf/nginx-template.conf /etc/nginx/nginx-template.conf
