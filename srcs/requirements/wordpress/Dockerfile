@@ -4,9 +4,9 @@ RUN apk update && apk add --no-cache \
     php php-fpm php-mysqli \
     mariadb-client curl wget
 
-RUN echo "listen = 0.0.0.0:9000" >> /etc/php/php-fpm.d/www.conf && \
-echo "clear_env = no" >> /etc/php/php-fpm.d/www.conf
-
+RUN mkdir -p /etc/php/php-fpm.d && \
+    echo "listen = 0.0.0.0:9000" >> /etc/php/php-fpm.d/www.conf && \
+    echo "clear_env = no" >> /etc/php/php-fpm.d/www.conf
 
 WORKDIR /var/www/wordpress
 
