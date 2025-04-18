@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-# Wait for MariaDB to be ready
 echo "Waiting for MariaDB at $WP_DATABASE_HOST..."
 until mysqladmin ping -h"$WP_DATABASE_HOST" --silent; do
   echo "Waiting..."
@@ -9,7 +8,6 @@ until mysqladmin ping -h"$WP_DATABASE_HOST" --silent; do
 done
 echo "MariaDB is up."
 
-# Now proceed with WordPress installation
 if ! wp core is-installed --allow-root --path=/var/www/wordpress; then
   echo "Installing WordPress..."
 
@@ -42,7 +40,7 @@ if ! wp core is-installed --allow-root --path=/var/www/wordpress; then
   wp config set WP_REDIS_PORT "$REDIS_PORT" --allow-root --path=/var/www/wordpress
   wp redis enable --allow-root --path=/var/www/wordpress
 
-#  chown -R nginx:nginx /var/www/wordpress
+  chown -R nginx:nginx /var/www/wordpress
   chmod -R 775 /var/www/wordpress
 fi
 

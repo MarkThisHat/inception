@@ -68,7 +68,7 @@ clean:
 		echo "To override, run: make $(MAKECMDGOALS) FORCE=true"; \
 		exit 1; \
 	fi
-	@rm -rf $(DATA_DIR)/wp-pages $(DATA_DIR)/wp-database $(DATA_DIR)/adminer-volume $(DATA_DIR)/minecraft-volume
+	@sudo rm -rf $(DATA_DIR)/wp-pages $(DATA_DIR)/wp-database $(DATA_DIR)/adminer-volume
 	@$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) down -v --rmi all --remove-orphans
 
 fclean: clean
