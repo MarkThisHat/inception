@@ -1,20 +1,25 @@
 #!/bin/bash
-
 set -e
 
-echo "DB: $WP_DATABASE_NAME, User: $WP_DATABASE_USER"
+echo "\n\nDB: $WP_DATABASE_NAME, User: $WP_DATABASE_USER\n\n"
 
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB data dir..."
     mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 fi
 
-# Start MariaDB in the background
 mysqld_safe &
 sleep 5
 
 echo "Creating database and users..."
-mariadb -u root <<EOF
+
+if mariadb -u root --connect-expired-password -e "SELECT 1;" 2>/dev/null; then
+    ROOT_LOGIN="mariadb -u root --connect-expired-password"
+else
+    ROOT_LOGIN="mariadb -u root -p${WP_DATABASE_ROOT_PASSWORD} --connect-expired-password"
+fi
+
+eval $ROOT_LOGIN <<EOF
 DROP USER IF EXISTS ''@'localhost';
 DROP DATABASE IF EXISTS test;
 CREATE DATABASE IF NOT EXISTS \`${WP_DATABASE_NAME}\`;
@@ -24,8 +29,6 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '${WP_DATABASE_ROOT_PASSWORD}';
 FLUSH PRIVILEGES;
 EOF
 
-# Stop the temporary MariaDB
-mysqladmin -u root -p${WP_DATABASE_ROOT_PASSWORD} shutdown
+mysqladmin -u root -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
 
-# Replace the running process with actual server
 exec mariadbd
