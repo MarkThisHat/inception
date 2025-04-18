@@ -5,7 +5,7 @@ services:
     build:
       context: ./requirements/nginx
       args:
-        DOMAIN_NAME: "${USER}.42.fr"
+        DOMAIN_NAME: "${LOGIN}.42.fr"
     container_name: nginx
     volumes:
       - wp-pages:/var/www/wordpress
@@ -16,7 +16,7 @@ services:
       - inception
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-k", "-f", "https://${USER}.42.fr"]
+      test: ["CMD", "curl", "-k", "-f", "https://${LOGIN}.42.fr"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -121,16 +121,16 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/{$USER}/data/wp-pages'
+      device: '/home/{$LOGIN}/data/wp-pages'
   wp-database:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/${USER}/data/wp-database'
+      device: '/home/${LOGIN}/data/wp-database'
   adminer-volume:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/{$USER}/data/adminer-volume'
+      device: '/home/{$LOGIN}/data/adminer-volume'

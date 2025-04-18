@@ -43,7 +43,7 @@ $(1):
 	docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
 
 build-$(1):
-	docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
+	LOGIN=$(LOGIN) docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
 
 stop-$(1):
 	docker-compose -f $(DOCKER_COMPOSE_YML) stop $(1)
