@@ -22,7 +22,7 @@ setup:
 #remove comment on final version @grep -q "$(LOGIN).42.fr" /etc/hosts || echo "127.0.0.1 $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
 
 up:
-	docker-compose -f $(DOCKER_COMPOSE_YML) up -d
+	LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR) docker-compose -f $(DOCKER_COMPOSE_YML) up -d
 
 down:
 	docker-compose -f $(DOCKER_COMPOSE_YML) down
