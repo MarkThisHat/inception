@@ -127,7 +127,7 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '${DATA_DIR}/data/wp-database'
+      device: '${DATA_DIR}/wp-database'
   adminer-volume:
     driver: local
     driver_opts:
