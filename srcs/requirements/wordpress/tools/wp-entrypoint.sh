@@ -47,4 +47,4 @@ if ! wp core is-installed --allow-root --path=/var/www/wordpress; then
 fi
 
 echo "WordPress is ready"
-exec php-fpm -F
+exec php-fpm83 -F
