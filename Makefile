@@ -20,6 +20,10 @@ all: permission setup up
 
 setup:
 	@echo "Setting up hosts and data directories..."
+	@mkdir -p $(DATA_DIR)/wp-database
+	@mkdir -p $(DATA_DIR)/wp-pages
+	@mkdir -p $(DATA_DIR)/adminer-volume
+
 #remove comment on final version @grep -q "$(LOGIN).42.fr" /etc/hosts || echo "127.0.0.1 $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
 
 up:
@@ -40,7 +44,6 @@ permission:
 
 define service_rules
 $(1):
-	@mkdir -p $(DATA_DIR)/wp-pages
 	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
 
 build-$(1):
