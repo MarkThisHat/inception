@@ -4,7 +4,7 @@ RUN apk update && apk add --no-cache \
     php php-fpm php-mysqli \
     php-phar php-json php-curl php-opcache \
     php-common php-mbstring php-tokenizer \
-    mariadb-client curl wget
+    mariadb-client curl
 
 WORKDIR /var/www/wordpress
 

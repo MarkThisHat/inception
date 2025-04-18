@@ -4,7 +4,7 @@ ARG UID
 ARG DOMAIN_NAME
 ENV DOMAIN_NAME=${DOMAIN_NAME}
 
-RUN apk update && apk add --no-cache nginx openssl gettext shadow
+RUN apk update && apk add --no-cache nginx openssl gettext shadow curl
 
 RUN adduser -u ${UID} -G www-data -D -s /sbin/nologin nginxuser && \
     mkdir -p /etc/nginx/ssl /var/www/wordpress /var/www/adminer /var/lib/nginx/logs && \
