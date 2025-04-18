@@ -17,7 +17,9 @@ RUN adduser -u ${UID} -G www-data -D -s /sbin/nologin nginxuser && \
     chmod 755 /var/lib/nginx /var/lib/nginx/logs && \
     touch /var/lib/nginx/logs/error.log && \
     chown nginxuser:www-data /var/lib/nginx/logs/error.log && \
-    chmod 755 /var/lib/nginx/logs/error.log
+    chmod 755 /var/lib/nginx/logs/error.log && \
+    mkdir -p /run/nginx && \
+    chown -R nginxuser:www-data /run/nginx
 
 COPY ./conf/nginx-template.conf /etc/nginx/nginx-template.conf
 COPY ./tools/entrypoint.sh /entrypoint.sh
@@ -25,7 +27,6 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 443
 
-# Use the user 'nginxuser' for the container process
 USER nginxuser
 
 ENTRYPOINT ["/entrypoint.sh"]
