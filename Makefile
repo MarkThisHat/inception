@@ -12,6 +12,7 @@
 
 LOGIN								:= maalexan
 DATA_DIR						:= /home/$(LOGIN)/data
+COMPOSE_ENV					:= LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR)
 DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
 SERVICES						:= nginx wordpress mariadb adminer redis site
 
@@ -22,10 +23,10 @@ setup:
 #remove comment on final version @grep -q "$(LOGIN).42.fr" /etc/hosts || echo "127.0.0.1 $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
 
 up:
-	LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR) docker-compose -f $(DOCKER_COMPOSE_YML) up -d
+	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) up -d
 
 down:
-	docker-compose -f $(DOCKER_COMPOSE_YML) down
+	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) down
 
 permission:
 	@printf "Checking Docker permissions... "
@@ -40,16 +41,16 @@ permission:
 define service_rules
 $(1):
 	@mkdir -p $(DATA_DIR)/wp-pages
-	LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR) docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
+	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
 
 build-$(1):
-	LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR) docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
+	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) up -d --build --force-recreate $(1)
 
 stop-$(1):
-	docker-compose -f $(DOCKER_COMPOSE_YML) stop $(1)
+	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) stop $(1)
 
 remove-$(1):
-	docker-compose -f $(DOCKER_COMPOSE_YML) rm -sfv $(1)
+	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) rm -sfv $(1)
 
 endef
 
@@ -62,16 +63,16 @@ clean:
 		exit 1; \
 	fi
 	@rm -rf $(DATA_DIR)/wp-pages $(DATA_DIR)/wp-database $(DATA_DIR)/adminer-volume $(DATA_DIR)/minecraft-volume
-	@docker-compose -f $(DOCKER_COMPOSE_YML) down -v --rmi all --remove-orphans
+	@$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) down -v --rmi all --remove-orphans
 
 fclean: clean
 	@echo "Removing all containers and images for services: $(SERVICES)"
-	@docker-compose -f $(DOCKER_COMPOSE_YML) rm -sfv $(SERVICES)
+	@$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) rm -sfv $(SERVICES)
 
 re: fclean all
 
 nuke: clean
-	@docker system prune --volumes --all --force
+	@$(COMPOSE_ENV) docker system prune --volumes --all --force
 
 
 .PHONY: all setup up down clean fclean nuke re permission \
