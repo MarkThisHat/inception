@@ -13,11 +13,10 @@ RUN useradd -r -u 1000 -g www-data -s /sbin/nologin nginxuser && \
       -out /etc/nginx/ssl/certificate.pem \
       -subj "/C=BR/ST=SP/L=SãoPaulo/O=42sp/CN=${DOMAIN_NAME}" && \
     chown -R nginxuser:www-data /var/www /etc/nginx /var/log/nginx /var/lib/nginx/logs /etc/nginx/ssl && \
-    chmod 755 /var/lib/nginx/logs
-
-RUN touch /var/lib/nginx/logs/error.log && \
+    chmod 777 /var/lib/nginx/logs && \
+    touch /var/lib/nginx/logs/error.log && \
     chown nginxuser:www-data /var/lib/nginx/logs/error.log && \
-    chmod 755 /var/lib/nginx/logs/error.log
+    chmod 777 /var/lib/nginx/logs/error.log
 
 COPY ./conf/nginx-template.conf /etc/nginx/nginx-template.conf
 COPY ./tools/entrypoint.sh /entrypoint.sh
@@ -28,5 +27,6 @@ EXPOSE 443
 USER nginxuser
 
 ENTRYPOINT ["/entrypoint.sh"]
+
 
 
