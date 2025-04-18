@@ -121,16 +121,16 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/{$LOGIN}/data/wp-pages'
+      device: '${DATA_DIR}/wp-pages'
   wp-database:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/${LOGIN}/data/wp-database'
+      device: '${DATA_DIR}/data/wp-database'
   adminer-volume:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/{$LOGIN}/data/adminer-volume'
+      device: '${DATA_DIR}/adminer-volume'
