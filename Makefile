@@ -13,7 +13,7 @@
 LOGIN								:= maalexan
 DATA_DIR						:= /home/$(LOGIN)/data
 DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
-SERVICES						:= nginx wordpress mariadb
+SERVICES						:= nginx wordpress mariadb adminer redis site
 
 all: permission setup up
 
