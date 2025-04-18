@@ -4,8 +4,9 @@ RUN apk update && apk add --no-cache \
     php php-fpm php-mysqli \
     mariadb-client curl wget
 
-RUN echo "listen = 0.0.0.0:9000" >> /etc/php8/php-fpm.d/www.conf && \
-    echo "clear_env = no" >> /etc/php8/php-fpm.d/www.conf
+RUN echo "listen = 0.0.0.0:9000" >> /etc/php/php-fpm.d/www.conf && \
+echo "clear_env = no" >> /etc/php/php-fpm.d/www.conf
+
 
 WORKDIR /var/www/wordpress
 
@@ -19,4 +20,5 @@ COPY tools/wp-entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/wp-entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/wp-entrypoint.sh"]
-CMD ["php-fpm8", "-F"]
+CMD ["php-fpm", "-F"]
+
