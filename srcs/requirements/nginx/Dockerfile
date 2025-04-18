@@ -1,14 +1,12 @@
 FROM alpine:3.20
 
 ARG UID
-ARG GID
 ARG DOMAIN_NAME
 ENV DOMAIN_NAME=${DOMAIN_NAME}
 
 RUN apk update && apk add --no-cache nginx openssl gettext shadow
 
-RUN addgroup -g ${GID} www-data && \
-    adduser -u ${UID} -G www-data -D -s /sbin/nologin nginxuser \
+RUN adduser -u ${UID} -G www-data -D -s /sbin/nologin nginxuser && \
     mkdir -p /etc/nginx/ssl /var/www/wordpress /var/www/adminer /var/lib/nginx/logs && \
     openssl req -newkey rsa:2048 -nodes \
       -keyout /etc/nginx/ssl/private.key \

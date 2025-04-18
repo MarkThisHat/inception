@@ -6,7 +6,6 @@ services:
       context: ./requirements/nginx
       args:
         UID: "${UID}"
-        GID: "${GID}"
         DOMAIN_NAME: "${LOGIN}.42.fr"
     container_name: nginx
     volumes:
