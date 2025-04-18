@@ -1,9 +1,9 @@
 FROM alpine:3.20
 
 RUN apk update && apk --no-cache add \
-  php php-fpm php-mysqli php-session wget
+  php php-fpm php-mysqli php-session curl
 
-RUN wget https://github.com/vrana/adminer/releases/download/v5.2.1/adminer-5.2.1-en.php && \
+RUN curl -L https://github.com/vrana/adminer/releases/download/v5.2.1/adminer-5.2.1-en.php -o /var/www/adminer/index.php && \
     mkdir -p /var/www/adminer && \
     mv adminer-5.2.1-en.php /var/www/adminer/index.php && \
 		chmod +x /var/www/adminer/index.php
