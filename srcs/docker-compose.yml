@@ -62,6 +62,20 @@ services:
       timeout: 5s
       retries: 5
 
+  adminer:
+    image: adminer
+    build:
+      context: ./bonus/adminer
+    container_name: adminer
+    volumes:
+      - adminer-volume:/var/www/adminer
+    networks:
+      - inception
+    restart:
+      always
+    depends_on:
+      - mariadb
+
 networks:
   inception:
     driver: bridge
