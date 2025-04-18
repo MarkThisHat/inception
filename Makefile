@@ -20,9 +20,9 @@ all: permission setup up
 
 setup:
 	@echo "Setting up hosts and data directories..."
-	@mkdir -p $(DATA_DIR)/wp-database
-	@mkdir -p $(DATA_DIR)/wp-pages
-	@mkdir -p $(DATA_DIR)/adminer-volume
+	@sudo mkdir -p $(DATA_DIR)/wp-database
+	@sudo mkdir -p $(DATA_DIR)/wp-pages
+	@sudo mkdir -p $(DATA_DIR)/adminer-volume
 
 #remove comment on final version @grep -q "$(LOGIN).42.fr" /etc/hosts || echo "127.0.0.1 $(LOGIN).42.fr" | sudo tee -a /etc/hosts > /dev/null
 
