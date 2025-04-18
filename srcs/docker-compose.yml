@@ -128,6 +128,12 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '/home/{$USER}/data/wp-pages'
+  mariadb-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/${USER}/data/mariadb-data'
   adminer-volume:
     driver: local
     driver_opts:
