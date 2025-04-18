@@ -14,7 +14,7 @@ RUN useradd -r -u 1000 -g www-data -s /sbin/nologin nginxuser && \
       -subj "/C=BR/ST=SP/L=SãoPaulo/O=42sp/CN=${DOMAIN_NAME}" && \
     chown -R nginxuser:www-data /var/www /etc/nginx /var/log/nginx /etc/nginx/ssl
 
-COPY ./conf/nginx.conf.template /etc/nginx/nginx.conf.template
+COPY ./conf/nginx-template.conf /etc/nginx/nginx-template.conf
 COPY ./tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
