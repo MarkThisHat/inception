@@ -16,6 +16,8 @@ services:
     networks:
       - inception
     restart: always
+    user:
+      "${UID}:${GID}"
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://${LOGIN}.42.fr"]
       interval: 10s
