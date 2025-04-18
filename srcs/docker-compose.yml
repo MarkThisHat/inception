@@ -15,6 +15,9 @@ services:
     networks:
       - inception
     restart: always
+    user:
+      "${UID}:${GID}"
+
     healthcheck:
       test: ["CMD", "curl", "-k", "-f", "https://${LOGIN}.42.fr"]
       interval: 10s
@@ -32,6 +35,8 @@ services:
       - wp-pages:/var/www/wordpress
     env_file: .env
     restart: unless-stopped
+    user:
+      "${UID}:${GID}"
     depends_on:
       - mariadb
     networks:
@@ -55,6 +60,8 @@ services:
         WP_DATABASE_ROOT_PASSWORD: ${WP_DATABASE_ROOT_PASSWORD}
     container_name: mariadb
     restart: unless-stopped
+    user:
+      "${UID}:${GID}"
     volumes:
       - wp-database:/var/lib/mysql
     env_file: .env
@@ -79,6 +86,8 @@ services:
       - inception
     restart:
       always
+    user:
+      "${UID}:${GID}"
     depends_on:
       - mariadb
     healthcheck: #this shit might have to go
@@ -97,6 +106,8 @@ services:
       - inception
     restart:
       always
+    user:
+      "${UID}:${GID}"
     depends_on:
       - wordpress
 
@@ -109,6 +120,8 @@ services:
       - inception
     restart:
       always
+    user:
+      "${UID}:${GID}"
 
 networks:
   inception:
