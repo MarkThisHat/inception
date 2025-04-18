@@ -1,3 +1,3 @@
 #!/bin/sh
 
-php-fpm -F
+exec php-fpm8 -F
