@@ -16,7 +16,7 @@ RUN apk update && apk --no-cache add \
     && mkdir -p /var/www/adminer \
     && mv adminer-5.2.1-en.php /var/www/adminer/index.php
 
-RUN echo "listen = 0.0.0.0:8000" >> /etc/php/php-fpm.d/www.conf
+RUN echo "listen = 0.0.0.0:8000" >> /etc/php8/php-fpm.d/www.conf
 
 EXPOSE 8000
 
