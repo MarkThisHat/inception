@@ -3,7 +3,7 @@ version: "3"
 services:
   nginx:
     build:
-      context: ./requirements/nginx
+      context: ./srcs
       args:
         DOMAIN_NAME: "${USER}.42.fr"
     container_name: nginx
@@ -27,7 +27,7 @@ services:
     container_name: wordpress
     image: wordpress
     build:
-      context: ./requirements/wordpress
+      context: ./srcs
     volumes:
       - wordpress:/var/www/wordpress
     env_file: .env
@@ -40,7 +40,7 @@ services:
 
   mariadb:
     build:
-      context: ./requirements/mariadb
+      context: ./srcs
       args:
         WP_DATABASE_NAME: ${WP_DATABASE_NAME}
         WP_DATABASE_USER: ${WP_DATABASE_USER}
