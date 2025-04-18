@@ -100,13 +100,37 @@ services:
     depends_on:
       - wordpress
 
+  site:
+    image: site
+    build:
+      context: ./bonus/site
+    container_name: site
+    networks:
+      - inception
+    restart:
+      always
+
 networks:
   inception:
     driver: bridge
     name: inception
 
 volumes:
+  wp-database:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/{$USER}/data/wp-database'
   wp-pages:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/{$USER}/data/wp-pages'
   adminer-volume:
-  wordpress:
-  mariadb-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/{$USER}/data/adminer-volume'
