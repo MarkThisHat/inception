@@ -20,7 +20,7 @@ RUN useradd -r -u 1000 -g www-data -s /sbin/nologin nginxuser && \
     chmod 755 /var/lib/nginx/logs/error.log
 
 COPY ./conf/nginx-template.conf /etc/nginx/nginx-template.conf
-COPY ../tools/entrypoint.sh /entrypoint.sh
+COPY ./tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 443

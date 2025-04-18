@@ -18,7 +18,7 @@ RUN curl -LO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
 
 STOPSIGNAL SIGQUIT
 
-COPY ../tools/wp-entrypoint.sh /usr/bin/
+COPY tools/wp-entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/wp-entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/wp-entrypoint.sh"]
