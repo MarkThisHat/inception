@@ -159,13 +159,6 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '${DATA_DIR}/wp-database'
-  volumes:
-  wp-pages:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '${DATA_DIR}/wordpress'
   ftp-pages:
     driver: local
     driver_opts:
