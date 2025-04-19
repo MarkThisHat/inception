@@ -69,7 +69,7 @@ services:
   adminer:
     image: adminer
     build:
-      context: .requirements/bonus/adminer
+      context: ./requirements/bonus/adminer
     container_name: adminer
     volumes:
       - adminer-volume:/var/www/adminer
@@ -83,7 +83,7 @@ services:
   redis:
     image: redis
     build:
-      context: .requirements/bonus/redis
+      context: ./requirements/bonus/redis
     container_name: redis
     networks:
       - inception
@@ -95,7 +95,7 @@ services:
   ftp:
     image: ftp
     build:
-      context: .requirements/bonus/ftp
+      context: ./requirements/bonus/ftp
       args:
         FTP_PATH: /var/www/ftp
         FTP_USER: ${FTP_USER}
@@ -115,7 +115,7 @@ services:
   cadvisor:
     image: cadvisor
     build:
-      context: .requirements/bonus/cadvisor
+      context: ./requirements/bonus/cadvisor
     container_name: cadvisor
     volumes:
       - /:/rootfs:ro
@@ -132,7 +132,7 @@ services:
   site:
     image: site
     build:
-      context: .requirements/bonus/site
+      context: ./requirements/bonus/site
     container_name: site
     volumes:
       - wp-pages:/var/www/site
