@@ -1,6 +1,8 @@
 from flask import Flask, render_template_string
 import os
 
+app = Flask(__name__)
+
 template = """
 <!DOCTYPE html>
 <html>
@@ -9,18 +11,19 @@ template = """
 <h1>Shared Files</h1>
 <ul>
     {% for file in files %}
-    <li><a href="/site/files/{{ file }}">{{ file }}</a></li>
+    <li><a href="/site/{{ file }}">{{ file }}</a></li>
     {% endfor %}
 </ul>
-<a href="/site">← Back to home</a>
+<a href="/">← Back to home</a>
 </body>
 </html>
 """
 
-ftp_dir = "/var/ftp"
-files = [f for f in os.listdir(ftp_dir) if os.path.isfile(os.path.join(ftp_dir, f))]
+@app.route("/")
+def index():
+    ftp_dir = "/var/www/wordpress/ftp"
+    files = [f for f in os.listdir(ftp_dir) if os.path.isfile(os.path.join(ftp_dir, f))]
+    return render_template_string(template, files=files)
 
-html = render_template_string(template, files=files)
-
-with open("/var/www/site/ftp/index.html", "w") as f:
-    f.write(html)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
