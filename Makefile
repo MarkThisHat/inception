@@ -70,9 +70,7 @@ re: fclean all
 
 nuke: clean
 	@$(COMPOSE_ENV) docker system prune --volumes --all --force
-	@rm srcs/.env || echo ""
-	@rm srcs/requirements/nginx/conf/certificate.pem || echo ""
-	@rm srcs/requirements/nginx/conf/private.key || echo ""
+	@rm srcs/.env || echo -n ""
 
 permission:
 	@printf "Checking Docker permissions... "
@@ -83,7 +81,6 @@ permission:
 		false)
 	@echo "✅"
 	@[ -f ./srcs/.env ] || (printf "ERROR: .env file not found, build one under srcs or run \"make env\" first\n"; false)
-	@[ -f ./conf/certificate.pem ] && [ -f ./conf/private.key ] || sudo mkcert -cert-file conf/certificate.pem -key-file conf/private.key $(LOGIN).42.fr
 
 env:
 	@[ -f ./srcs/.env ] && echo "There is already a srcs/.env file ✅" && \
@@ -98,4 +95,3 @@ env:
 	$(addprefix build-,$(SERVICES)) \
 	$(addprefix stop-,$(SERVICES)) \
 	$(addprefix remove-,$(SERVICES)) 
-
