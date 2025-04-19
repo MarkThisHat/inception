@@ -69,6 +69,7 @@ clean:
 		exit 1; \
 	fi
 	@sudo rm -rf $(DATA_DIR)/wp-pages $(DATA_DIR)/wp-database $(DATA_DIR)/adminer-volume
+	@sudo rmdir $(DATA_DIR) || echo "$(DATA_DIR) should be empty but isn't"
 	@$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) down -v --rmi all --remove-orphans
 
 fclean: clean
