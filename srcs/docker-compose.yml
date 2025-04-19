@@ -96,17 +96,17 @@ services:
     build:
       context: ./bonus/ftp
       args:
-        FTP_PATH: ${FTP_PATH}
+        FTP_PATH: /var/www/wordpress
         FTP_USER: ${FTP_USER}
         FTP_PASSWORD: ${FTP_PASSWORD}
     container_name: ftp
     volumes:
-      - wp-pages:${FTP_PATH}
+      - wp-pages:/var/www/wordpress
     networks:
       - inception
     ports:
       - "21:21"
-      - "10099-10100:10099-10100"
+      - "10090-10100:10090-10100"
     restart: always
     depends_on:
       - wordpress
@@ -133,11 +133,12 @@ services:
     build:
       context: ./bonus/site
     container_name: site
+    volumes:
+      - wp-pages:/var/www/site
     networks:
       - inception
     restart:
       always
-
 
 networks:
   inception:
