@@ -1,10 +1,21 @@
 FROM alpine:3.20
 
+RUN apk update && apk add --no-cache \
+    nginx \ python3 \ py3-pip \
+    py3-virtualenv \ bash
+
+RUN mkdir -p /var/www/site /run/nginx
+
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
 COPY ./tools/ /var/www/site/
 
-RUN apk update && apk add --no-cache nginx python3 py3-pip && \
-    pip install Flask
+RUN python3 -m venv /env && \
+    /env/bin/pip install Flask gunicorn
 
-RUN chmod +x /var/www/site/entrypoint.sh
-ENTRYPOINT ["/var/www/site/entrypoint.sh"]
+COPY ./tools/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 7000
+
+ENTRYPOINT ["/entrypoint.sh"]

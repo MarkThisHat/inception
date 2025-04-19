@@ -13,4 +13,8 @@ done
 
 sed "s|{{FILES}}|$file_list|" /var/www/site/template.html > /var/www/site/files/index.html
 
-exec nginx -g "daemon off;"
+/env/bin/gunicorn -b 127.0.0.1:5000 app:app &
+
+nginx -g "daemon off;"
+
+
