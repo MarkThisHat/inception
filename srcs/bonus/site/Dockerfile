@@ -1,10 +1,10 @@
 FROM alpine:3.20
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
-
-RUN mkdir -p /var/www/site
 COPY ./tools/ /var/www/site/
 
-RUN apk update && apk add --no-cache nginx
+RUN apk update && apk add --no-cache nginx python3 py3-pip && \
+    pip install Flask
 
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+RUN chmod +x /var/www/site/entrypoint.sh
+ENTRYPOINT ["/var/www/site/entrypoint.sh"]
