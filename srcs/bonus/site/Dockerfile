@@ -1,6 +1,6 @@
 FROM alpine:3.20
 
-RUN apk update && apk add --no-cache nginx python py-pip py-virtualenv bash
+RUN apk update && apk add --no-cache nginx python3 py-pip py-virtualenv bash
 
 RUN mkdir -p /var/www/site /run/nginx
 
