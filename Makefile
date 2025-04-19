@@ -14,7 +14,7 @@ LOGIN								:= maalexan
 DATA_DIR						:= /home/$(LOGIN)/data
 COMPOSE_ENV					:= LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR) UID=$$(id -u) GID=$$(id -g)
 DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
-SERVICES						:= nginx wordpress mariadb adminer redis site
+SERVICES						:= nginx wordpress mariadb adminer redis site ftp cadvisor
 
 all: permission setup up
 
