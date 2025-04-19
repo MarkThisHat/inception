@@ -1,11 +1,10 @@
 FROM alpine:3.20
 
-RUN apk add --no-cache nodejs npm \
-  && mkdir -p /opt/site /var/www/site
+RUN apk add --no-cache nodejs npm
 
-COPY tools/index.html /opt/site/
-COPY tools/server.js /opt/site/
+WORKDIR /app
 
-WORKDIR /opt/site
+COPY ./tools/index.html ./index.html
+COPY ./tools/server.js ./server.js
 
-CMD [ "node", "server.js" ]
+CMD ["sh", "-c", "cp /app/index.html /var/www/site/index.html && node /app/server.js"]
