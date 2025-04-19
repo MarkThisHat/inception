@@ -40,12 +40,6 @@ services:
     networks:
       - inception
     init: true
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/wp-login.php"]
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      timeout: 10s
 
   mariadb:
     build:
