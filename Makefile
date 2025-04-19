@@ -85,7 +85,7 @@ env:
 	@echo "Generating .env file with placeholder passwords..."
 	@echo "WP_DATABASE_HOST=mariadb\nWP_DATABASE_NAME=wordpress\nWP_DATABASE_USER=wp_user\nWP_DATABASE_ROOT=root\nWP_URL=http://localhost\nWP_TITLE=My Awesome Site\nWP_ADMIN_USER=toptier\nWP_ADMIN_EMAIL=toptier@example.com\nWP_USER=changer\nWP_USER_EMAIL=changer@example.com\nHEALTH_USER=healthchecker\nREDIS_HOST=redis\nREDIS_PORT=6379\nFTP_USER=ftpuser\nFTP_PATH=/var/www/wordpress\nWP_DATABASE_PASSWORD=CHANGE_ME_DB_PASS\nWP_DATABASE_ROOT_PASSWORD=CHANGE_ME_ROOT_PASS\nWP_ADMIN_PASSWORD=CHANGE_ME_ADMIN_PASS\nWP_USER_PASSWORD=CHANGE_ME_USER_PASS\nFTP_PASSWORD=CHANGE_ME_FTP_PASS\nHEALTH_PASS=CHANGE_ME_HEALTH_PASS" > srcs/.env
 	@echo ".env generated, you can run this command to be able to visualize the containers"
-	@echo "alias dps="docker ps --format 'table {{.ID}}\\t{{.Names}}\\t{{.Created}}\\t{{.Status}}\\t{{.Image}}'""
+	@echo "alias dps=\"docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'\""
 
 .PHONY: all setup up down clean fclean nuke re permission env \
 	$(SERVICES) \
