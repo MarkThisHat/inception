@@ -9,7 +9,6 @@ const ftpPath = path.join(root, 'ftp');
 http.createServer((req, res) => {
   const reqUrl = decodeURIComponent(req.url);
 
-  // Handle FTP directory listing
   if (reqUrl === '/ftp/' || reqUrl.startsWith('/ftp/')) {
     const relativeFtpPath = reqUrl.replace('/ftp', '');
     const fullFtpPath = path.join(ftpPath, relativeFtpPath);
@@ -28,16 +27,16 @@ http.createServer((req, res) => {
           }
 
           const links = files.map(file =>
-            `<li><a href="site/ftp/${file}">${file}</a></li>`
+            `<li><a href="/site/ftp/${file}">${file}</a></li>`
           ).join('\n');
 
           const html = `
             <html>
               <head><title>Index of ftp</title></head>
               <body>
-                <h1>Index of ftp files</h1>
+                <h1>Index of FTP files</h1>
                 <ul>${links}</ul>
-                <a href="site/">Return to site</a>
+                <a href="/site/">Return to site</a>
               </body>
             </html>
           `;
@@ -59,7 +58,6 @@ http.createServer((req, res) => {
     return;
   }
 
-  // Serve index.html or other static assets
   const filePath = path.join(root, reqUrl === '/' ? '/index.html' : reqUrl);
   fs.readFile(filePath, (err, content) => {
     if (err) {
