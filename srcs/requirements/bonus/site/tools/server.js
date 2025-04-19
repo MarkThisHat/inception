@@ -18,9 +18,11 @@ http.createServer((req, res) => {
     const filePath = path.join('/var/www/site', req.url);
     fs.readFile(filePath, (err, content) => {
       if (err) {
+        console.log("got there but no cigar");
         res.writeHead(404);
         res.end('404 Not Found');
       } else {
+        console.log("got there and cigar");
         res.writeHead(200);
         res.end(content);
       }
@@ -29,10 +31,12 @@ http.createServer((req, res) => {
     const filePath = path.join(root, req.url === '/' ? '/index.html' : req.url);
     fs.readFile(filePath, (err, content) => {
       if (err) {
+        console.log("xubaluba");
         res.writeHead(404);
         res.end('404 Not Found');
       } else {
         res.writeHead(200);
+        console.log("gubdeb");
         res.end(content);
       }
     });
