@@ -43,7 +43,7 @@ permission:
 		echo "Try: sudo usermod -aG docker $$(whoami) && newgrp docker"; \
 		false)
 	@echo "✅"
-	@[ -f ./srcs/.env ] || printf "ERROR: .env file not found, build one under srcs or run \"make env\" first\n"; false
+	@[ -f ./srcs/.env ] || (printf "ERROR: .env file not found, build one under srcs or run \"make env\" first\n"; false)
 
 define service_rules
 $(1):
