@@ -125,6 +125,8 @@ services:
       - inception
     restart:
       always
+    expose:
+      "8080"
 
   site:
     image: site
