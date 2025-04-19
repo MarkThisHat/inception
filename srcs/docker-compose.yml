@@ -136,6 +136,7 @@ services:
     container_name: site
     volumes:
     - site-pages:/var/www/site
+    - ftp-pages:/var/www/site/ftp:ro
     networks:
       - inception
     restart:
