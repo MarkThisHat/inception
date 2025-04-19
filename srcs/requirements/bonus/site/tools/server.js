@@ -5,7 +5,7 @@ const path = require('path');
 const port = 7000;
 const root = '/var/www/site';
 
-// Create /var/www/site if not exists and copy files
+// Ensure root exists and has index.html
 if (!fs.existsSync(root)) {
   fs.mkdirSync(root, { recursive: true });
 }
@@ -14,34 +14,24 @@ if (fs.readdirSync(root).length === 0) {
 }
 
 http.createServer((req, res) => {
-  if (req.url.startsWith('/ftp/')) {
-    const filePath = path.join('/var/www/site', req.url);
-    fs.readFile(filePath, (err, content) => {
-      if (err) {
-        console.log("got there but no cigar");
-        res.writeHead(404);
-        res.end('404 Not Found');
-      } else {
-        console.log("got there and cigar");
-        res.writeHead(200);
-        res.end(content);
-      }
-    });
-  } else {
-    const filePath = path.join(root, req.url === '/' ? '/index.html' : req.url);
-    fs.readFile(filePath, (err, content) => {
-      if (err) {
-        console.log("xubaluba");
-        res.writeHead(404);
-        res.end('404 Not Found');
-      } else {
-        res.writeHead(200);
-        console.log("gubdeb");
-        res.end(content);
-      }
-    });
-  }
-}).listen(port, () => {
-  console.log(`Site served at http://localhost:${port}`);
-});
+  // Strip optional `/site` prefix if behind reverse proxy
+  let relativeUrl = req.url.replace(/^\/site/, '') || '/index.html';
+  relativeUrl = decodeURIComponent(relativeUrl); // handle %20 etc.
+  const safePath = path.normalize(relativeUrl).replace(/^(\.\.[/\\])+/, '');
 
+  const filePath = path.join(root, safePath);
+
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      console.log(`[404] ${req.url}`);
+      res.writeHead(404);
+      res.end('404 Not Found');
+    } else {
+      console.log(`[200] ${req.url}`);
+      res.writeHead(200);
+      res.end(content);
+    }
+  });
+}).listen(port, () => {
+  console.log(`📦 Site served at http://localhost:${port}`);
+});
