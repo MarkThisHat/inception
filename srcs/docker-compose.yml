@@ -91,6 +91,43 @@ services:
     depends_on:
       - wordpress
 
+  ftp:
+    image: ftp
+    build:
+      context: ./bonus/ftp
+      args:
+        FTP_PATH: ${FTP_PATH}
+        FTP_USER: ${FTP_USER}
+        FTP_PASSWORD: ${FTP_PASSWORD}
+    container_name: ftp
+    volumes:
+      - wp-pages:${FTP_PATH}
+    networks:
+      - inception
+    ports:
+      - "21:21"
+      - "10090-10100:10090-10100"
+    restart: always
+    depends_on:
+      - wordpress
+
+  cadvisor:
+    image: cadvisor
+    build:
+      context: ./bonus/cadvisor
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+    restart:
+      always
+
   site:
     image: site
     build:
@@ -100,6 +137,7 @@ services:
       - inception
     restart:
       always
+
 
 networks:
   inception:
