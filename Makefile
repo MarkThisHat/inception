@@ -35,16 +35,6 @@ up:
 down:
 	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) down
 
-permission:
-	@printf "Checking Docker permissions... "
-	@docker info > /dev/null 2>&1 || (\
-		printf "❌\n"; \
-		echo "Docker requires elevated permissions"; \
-		echo "Try: sudo usermod -aG docker $$(whoami) && newgrp docker"; \
-		false)
-	@echo "✅"
-	@[ -f ./srcs/.env ] || (printf "ERROR: .env file not found, build one under srcs or run \"make env\" first\n"; false)
-
 define service_rules
 $(1):
 	$(COMPOSE_ENV) docker-compose -f $(DOCKER_COMPOSE_YML) up -d $(1)
@@ -81,14 +71,27 @@ re: fclean all
 nuke: clean
 	@$(COMPOSE_ENV) docker system prune --volumes --all --force
 	@rm srcs/.env
+	@rm srcs/requirements/nginx/conf/certificate.pem
+	@rm srcs/requirements/nginx/conf/private.key
+
+permission:
+	@printf "Checking Docker permissions... "
+	@docker info > /dev/null 2>&1 || (\
+		printf "❌\n"; \
+		echo "Docker requires elevated permissions"; \
+		echo "Try: sudo usermod -aG docker $$(whoami) && newgrp docker"; \
+		false)
+	@echo "✅"
+	@[ -f ./srcs/.env ] || (printf "ERROR: .env file not found, build one under srcs or run \"make env\" first\n"; false)
+	@[ -f ./conf/certificate.pem ] && [ -f ./conf/private.key ] || mkcert -cert-file conf/certificate.pem -key-file conf/private.key $(LOGIN).42.fr
 
 env:
-	@echo "Generating .env file with placeholder passwords..."
-	@printf "%s\n" "WP_DATABASE_HOST=mariadb" "WP_DATABASE_NAME=wordpress" "WP_DATABASE_USER=wp_user" "WP_DATABASE_ROOT=root" "WP_URL=http://$(LOGIN).42.fr" "WP_TITLE=The $(LOGIN)'s $(LOGIN)ness" "WP_ADMIN_USER=toptier" "WP_ADMIN_EMAIL=toptier@example.com" "WP_USER=changer" "WP_USER_EMAIL=changer@example.com" "HEALTH_USER=healthchecker" "REDIS_HOST=redis" "REDIS_PORT=6379" "FTP_USER=ftpuser" "FTP_PATH=/var/www/wordpress" "WP_DATABASE_PASSWORD=CHANGE_ME_DB_PASS" "WP_DATABASE_ROOT_PASSWORD=CHANGE_ME_ROOT_PASS" "WP_ADMIN_PASSWORD=CHANGE_ME_ADMIN_PASS" "WP_USER_PASSWORD=CHANGE_ME_USER_PASS" "FTP_PASSWORD=CHANGE_ME_FTP_PASS" "HEALTH_PASS=CHANGE_ME_HEALTH_PASS" > srcs/.env
-	@echo ".env generated ✅"
-	@echo "(NOTE: add the following alias to avoid port mess when using docker ps)"
-	@echo 'alias dps='\''docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}"'\'
-
+	@[ -f ./srcs/.env ] && echo "There is already a srcs/.env file ✅" && \
+	echo "NOTE: add the following alias to avoid port mess when using docker ps" && \
+	echo 'alias dps='\''docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}"'\' || \
+	(echo -n "Generating .env file with placeholder passwords..." && \
+	printf "%s\n" "WP_DATABASE_HOST=mariadb" "WP_DATABASE_NAME=wordpress" "WP_DATABASE_USER=wp_user" "WP_DATABASE_ROOT=root" "WP_URL=http://$(LOGIN).42.fr" "WP_TITLE=The $(LOGIN)'s page of wonderful $(LOGIN)derness" "WP_ADMIN_USER=toptier" "WP_ADMIN_EMAIL=toptier@example.com" "WP_USER=changer" "WP_USER_EMAIL=changer@example.com" "HEALTH_USER=healthchecker" "REDIS_HOST=redis" "REDIS_PORT=6379" "FTP_USER=ftpuser" "FTP_PATH=/var/www/wordpress" "WP_DATABASE_PASSWORD=CHANGE_ME_DB_PASS" "WP_DATABASE_ROOT_PASSWORD=CHANGE_ME_ROOT_PASS" "WP_ADMIN_PASSWORD=CHANGE_ME_ADMIN_PASS" "WP_USER_PASSWORD=CHANGE_ME_USER_PASS" "FTP_PASSWORD=CHANGE_ME_FTP_PASS" "HEALTH_PASS=CHANGE_ME_HEALTH_PASS" > srcs/.env && \
+	echo "✅")
 
 .PHONY: all setup up down clean fclean nuke re permission env \
 	$(SERVICES) \

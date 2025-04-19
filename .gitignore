@@ -1,1 +1,3 @@
 srcs/.env
+srcs/requirements/nginx/conf/certificate.pem
+srcs/requirements/nginx/conf/private.key
