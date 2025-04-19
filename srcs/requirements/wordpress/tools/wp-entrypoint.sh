@@ -1,6 +1,13 @@
 #!/bin/sh
 set -e
 
+echo "Waiting for MariaDB at $WP_DATABASE_HOST..."
+until mysqladmin ping -h"$WP_DATABASE_HOST" --silent; do
+  echo "Waiting..."
+  sleep 1
+done
+echo "MariaDB is up."
+
 if ! wp core is-installed --allow-root --path=/var/www/wordpress; then
   echo "Installing WordPress..."
 
