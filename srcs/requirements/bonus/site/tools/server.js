@@ -4,52 +4,72 @@ const path = require('path');
 
 const port = 7000;
 const root = '/var/www/site';
-const ftpRoot = '/var/www/site/ftp';
-
-// Create /var/www/site if not exists and copy files
-if (!fs.existsSync(root)) {
-  fs.mkdirSync(root, { recursive: true });
-}
-if (fs.readdirSync(root).length === 0) {
-  fs.copyFileSync(path.join(__dirname, 'index.html'), path.join(root, 'index.html'));
-}
+const ftpPath = path.join(root, 'ftp');
 
 http.createServer((req, res) => {
-  if (req.url.startsWith('/ftp/')) {
-    // Handle FTP listing
-    const dirPath = path.join(ftpRoot, req.url.replace('/ftp/', '') || '');
-    fs.readdir(dirPath, (err, files) => {
+  const reqUrl = decodeURIComponent(req.url);
+
+  // Handle FTP directory listing
+  if (reqUrl === '/ftp/' || reqUrl.startsWith('/ftp/')) {
+    const relativeFtpPath = reqUrl.replace('/ftp', '');
+    const fullFtpPath = path.join(ftpPath, relativeFtpPath);
+
+    fs.stat(fullFtpPath, (err, stats) => {
       if (err) {
         res.writeHead(404);
-        res.end('404 Not Found');
-        return;
+        return res.end('404 Not Found');
       }
 
-      // Generate list of files with correct /site/ftp/ paths
-      let fileLinks = files.map(file => {
-        const filePath = `/site/ftp/${file}`;
-        return `<li><a href="${filePath}">${file}</a></li>`;
-      }).join('');
+      if (stats.isDirectory()) {
+        fs.readdir(fullFtpPath, (err, files) => {
+          if (err) {
+            res.writeHead(500);
+            return res.end('500 Internal Server Error');
+          }
 
-      // Add "Return to /site/" link at the bottom
-      fileLinks += '<li><a href="/site/">Return to Site</a></li>';
+          const links = files.map(file =>
+            `<li><a href="site/ftp/${file}">${file}</a></li>`
+          ).join('\n');
 
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(`<ul>${fileLinks}</ul>`);
-    });
-  } else {
-    // Serve the main site
-    const filePath = path.join(root, req.url === '/' ? '/index.html' : req.url);
-    fs.readFile(filePath, (err, content) => {
-      if (err) {
-        res.writeHead(404);
-        res.end('404 Not Found');
+          const html = `
+            <html>
+              <head><title>Index of ftp</title></head>
+              <body>
+                <h1>Index of ftp files</h1>
+                <ul>${links}</ul>
+                <a href="site/">Return to site</a>
+              </body>
+            </html>
+          `;
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(html);
+        });
       } else {
-        res.writeHead(200);
-        res.end(content);
+        fs.readFile(fullFtpPath, (err, content) => {
+          if (err) {
+            res.writeHead(404);
+            res.end('404 Not Found');
+          } else {
+            res.writeHead(200);
+            res.end(content);
+          }
+        });
       }
     });
+    return;
   }
+
+  // Serve index.html or other static assets
+  const filePath = path.join(root, reqUrl === '/' ? '/index.html' : reqUrl);
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('404 Not Found');
+    } else {
+      res.writeHead(200);
+      res.end(content);
+    }
+  });
 }).listen(port, () => {
-  console.log(`Site served at http://localhost:${port}`);
+  console.log(`✅ Site served at http://localhost:${port}`);
 });
