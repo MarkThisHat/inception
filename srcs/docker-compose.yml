@@ -102,7 +102,7 @@ services:
         FTP_PASSWORD: ${FTP_PASSWORD}
     container_name: ftp
     volumes:
-      - wp-pages:/var/www/ftp
+    - ftp-pages:/var/www/ftp
     networks:
       - inception
     ports:
@@ -135,7 +135,7 @@ services:
       context: ./requirements/bonus/site
     container_name: site
     volumes:
-      - wp-pages:/var/www/site
+    - site-pages:/var/www/site
     networks:
       - inception
     restart:
@@ -159,6 +159,25 @@ volumes:
       type: 'none'
       o: 'bind'
       device: '${DATA_DIR}/wp-database'
+  volumes:
+  wp-pages:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DATA_DIR}/wordpress'
+  ftp-pages:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DATA_DIR}/ftp'
+  site-pages:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DATA_DIR}/site'
   adminer-volume:
     driver: local
     driver_opts:
