@@ -96,12 +96,12 @@ services:
     build:
       context: ./bonus/ftp
       args:
-        FTP_PATH: /var/www/ftp
+        FTP_PATH: /var/www/wordpress/ftp
         FTP_USER: ${FTP_USER}
         FTP_PASSWORD: ${FTP_PASSWORD}
     container_name: ftp
     volumes:
-      - wp-pages:/var/www/ftp
+      - wp-pages:/var/www/wordpress/ftp
     networks:
       - inception
     ports:
@@ -134,7 +134,7 @@ services:
       context: ./bonus/site
     container_name: site
     volumes:
-      - wp-pages:/var/www/site
+      - wp-pages:/var/www/wordpress/site
     networks:
       - inception
     restart:
