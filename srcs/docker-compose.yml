@@ -106,7 +106,7 @@ services:
       - inception
     ports:
       - "21:21"
-      - "10090-10100:10090-10100"
+      - "10099-10100:10099-10100"
     restart: always
     depends_on:
       - wordpress
