@@ -90,7 +90,7 @@ env:
 	@./srcs/requirements/tools/setup-env.sh $(LOGIN)
 
 alias:
-	alias dps=docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}"
+	alias dps='docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}"'
 
 .PHONY: all setup up down clean fclean nuke re permission env \
 	$(SERVICES) \
