@@ -85,12 +85,16 @@ permission:
 	@[ -f ./srcs/.env ] && [ "$(wc -l < ./srcs/.env)" -ge 20 ] || \
 	(printf "ERROR: .env file not found or incomplete. Build one under srcs or run \"make env\" first\n"; false)
 
+
 env:
 	@chmod +x ./srcs/requirements/tools/setup-env.sh
 	@./srcs/requirements/tools/setup-env.sh $(LOGIN)
+	@echo "NOTE: add the following alias to avoid port mess when using docker ps"
+	@echo 'alias dps='\''docker ps --format "table {{.ID}}\\t{{.Image}}\\t{{.Names}}\\t{{.Status}}"'\'
 
 alias:
-	alias dps='docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}"'
+	@echo "NOTE: add the following alias to avoid port mess when using docker ps"
+	@echo 'alias dps='\''docker ps --format "table {{.ID}}\\t{{.Image}}\\t{{.Names}}\\t{{.Status}}"'\'
 
 .PHONY: all setup up down clean fclean nuke re permission env \
 	$(SERVICES) \
