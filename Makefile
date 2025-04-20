@@ -13,6 +13,7 @@
 LOGIN								:= maalexan
 DATA_DIR						:= /home/$(LOGIN)/data
 COMPOSE_ENV					:= LOGIN=$(LOGIN) DATA_DIR=$(DATA_DIR) UID=$$(id -u) GID=$$(id -g)
+ENV_LINES						:= 20
 DOCKER_COMPOSE_YML	:= ./srcs/docker-compose.yml
 SERVICES						:= nginx wordpress mariadb adminer redis site ftp cadvisor
 
@@ -82,15 +83,17 @@ permission:
 		echo "Try: sudo usermod -aG docker $$(whoami) && newgrp docker"; \
 		false)
 	@echo "✅"
-	@[ -f ./srcs/.env ] && [ "$(wc -l < ./srcs/.env)" -ge 20 ] || \
-	(printf "ERROR: .env file not found or incomplete. Build one under srcs or run \"make env\" first\n"; false)
-
+	@if [ ! -f ./srcs/.env ]; then \
+		printf "ERROR: .env file not found, build one under srcs or run \"make env\" first\n"; \
+		false; \
+	elif [ "$$(wc -l < ./srcs/.env | tr -d ' ')" -lt $(ENV_LINES) ]; then \
+		printf "ERROR: .env file amount of lines must be $(ENV_LINES)\n"; \
+		false; \
+	fi
 
 env:
 	@chmod +x ./srcs/requirements/tools/setup-env.sh
 	@./srcs/requirements/tools/setup-env.sh $(LOGIN)
-	@echo "NOTE: add the following alias to avoid port mess when using docker ps"
-	@echo 'alias dps='\''docker ps --format "table {{.ID}}\\t{{.Image}}\\t{{.Names}}\\t{{.Status}}"'\'
 
 alias:
 	@echo "NOTE: add the following alias to avoid port mess when using docker ps"
