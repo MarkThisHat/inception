@@ -69,5 +69,5 @@ http.createServer((req, res) => {
     }
   });
 }).listen(port, () => {
-  console.log(`✅ Site served at http://localhost:${port}`);
+  console.log(`Site is up at port ${port}`);
 });
