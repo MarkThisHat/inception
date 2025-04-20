@@ -22,4 +22,3 @@ RUN chmod +x /usr/bin/wp-entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/wp-entrypoint.sh"]
 CMD ["php-fpm83", "-F"]
-
