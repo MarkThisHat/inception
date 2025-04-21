@@ -5,6 +5,7 @@ INIT_MARKER=/var/lib/mysql/.mariadb_initialized
 
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
+chown -R mysql:mysql /var/lib/mysql
 
 if [ ! -f "$INIT_MARKER" ]; then
   echo "[MariaDB] First run detected. Generating init.sql..."
