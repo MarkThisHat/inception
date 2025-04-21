@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ -f /etc/init-template.sql ]; then
+if [ ! -f /etc/init.sql ]; then
   echo "[MariaDB] First run detected. Generating init.sql..."
   envsubst '$WP_DATABASE_NAME $WP_DATABASE_USER $WP_DATABASE_PASSWORD $WP_DATABASE_ROOT_PASSWORD $HEALTH_USER $HEALTH_PASS' < /etc/init-template.sql > /etc/init.sql
   rm /etc/init-template.sql
