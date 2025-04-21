@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-if [ ! -f /etc/init.sql ]; then
+INIT_MARKER=/var/lib/mysql/.mariadb_initialized
+
+if [ ! -f "$INIT_MARKER" ]; then
   echo "[MariaDB] First run detected. Generating init.sql..."
   envsubst '$WP_DATABASE_NAME $WP_DATABASE_USER $WP_DATABASE_PASSWORD $WP_DATABASE_ROOT_PASSWORD $HEALTH_USER $HEALTH_PASS' < /etc/init-template.sql > /etc/init.sql
   rm /etc/init-template.sql
@@ -25,6 +27,7 @@ if [ ! -f /etc/init.sql ]; then
   echo "[MariaDB] Shutting down temporary server..."
   mysqladmin -u root --protocol=socket --socket=/run/mysqld/mysqld.sock -p"${WP_DATABASE_ROOT_PASSWORD}" shutdown
 
+  touch "$INIT_MARKER"
   echo "[MariaDB] First-time setup complete."
 else
   echo "[MariaDB] Normal startup. Skipping initialization."
