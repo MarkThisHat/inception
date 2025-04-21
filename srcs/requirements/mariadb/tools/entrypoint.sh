@@ -3,6 +3,9 @@ set -e
 
 INIT_MARKER=/var/lib/mysql/.mariadb_initialized
 
+mkdir -p /run/mysqld
+chown mysql:mysql /run/mysqld
+
 if [ ! -f "$INIT_MARKER" ]; then
   echo "[MariaDB] First run detected. Generating init.sql..."
   envsubst '$WP_DATABASE_NAME $WP_DATABASE_USER $WP_DATABASE_PASSWORD $WP_DATABASE_ROOT_PASSWORD $HEALTH_USER $HEALTH_PASS' < /etc/init-template.sql > /etc/init.sql
@@ -15,7 +18,7 @@ if [ ! -f "$INIT_MARKER" ]; then
 
   echo "[MariaDB] Starting temporary server..."
   mysqld_safe --user=mysql &
-  
+
   echo "[MariaDB] Waiting for server to become ready..."
   until mariadb-admin ping --protocol=socket --socket=/run/mysqld/mysqld.sock --silent; do
     sleep 1
